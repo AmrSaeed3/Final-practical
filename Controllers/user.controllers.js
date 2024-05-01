@@ -25,7 +25,7 @@ const register = asyncWrapper(async (req, res, next) => {
   const hashPassword = await bcrypt.hash(password, 10);
   const currentDate = moment().tz("Africa/Cairo");
   const newUser = new UserAll({
-    username: username,
+    userName: username,
     email: email,
     password: hashPassword,
     numPhone: numPhone,
