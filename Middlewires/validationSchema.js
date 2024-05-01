@@ -5,8 +5,8 @@ const validationSchema = () => {
     body("username")
       .notEmpty()
       .withMessage("username is required")
-      .isLength({ min: 6 })
-      .withMessage("username at least is 6 digits"),
+      .isLength({ min: 3 })
+      .withMessage("username at least is 3 digits"),
     body("email")
       .notEmpty()
       .withMessage("email is required")

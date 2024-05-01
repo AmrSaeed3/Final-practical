@@ -255,7 +255,6 @@ const deleteUser = asyncWrapper(async (req, res, next) => {
 //
 module.exports = {
   deleteUser,
-  historyUser,
   // forgotPassword,
   // resetPasswordSend,
   // resetPasswordOk,
