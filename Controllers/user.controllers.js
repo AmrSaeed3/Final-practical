@@ -16,45 +16,28 @@ const register = asyncWrapper(async (req, res, next) => {
     const error = appError.create(errors.array()[0], 400, httpStatus.FAIL);
     return next(error);
   }
-  const { signup_email, signup_password , confirm_password } = req.body;
-  const olduser = await UserAll.findOne({ email: signup_email });
+  const { username, email, numPhone, password } = req.body;
+  const olduser = await UserAll.findOne({ email: email });
   if (olduser) {
     const error = appError.create("user already exists", 400, httpStatus.FAIL);
     return next(error);
   }
-  if(signup_password != confirm_password){
-    const error = appError.create("Password is not same", 400, httpStatus.FAIL);
-    return next(error);
-  }
-  const hashPassword = await bcrypt.hash(signup_password, 10);
-  const currentDate = moment().tz('Africa/Cairo');
+  const hashPassword = await bcrypt.hash(password, 10);
+  const currentDate = moment().tz("Africa/Cairo");
   const newUser = new UserAll({
-    email :signup_email,
+    username: username,
+    email: email,
     password: hashPassword,
+    numPhone: numPhone,
     date: currentDate.format("DD-MMM-YYYY hh:mm:ss a"),
   });
   await newUser.save();
   return res.status(200).json({
     status: httpStatus.SUCCESS,
-  });
-  // const redirectUrl = `/verify?userName=${userName}&email=${email}&password=${password}&token=${token}`;
-  // res.redirect(redirectUrl)
+  });
 });
 
-//login
-const login = (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = appError.create(errors.array()[0], 400, httpStatus.FAIL);
-    return next(error);
-  }
-  passport.authenticate("local", {
-    successRedirect: "/success",
-    failureRedirect: "/failure",
-    failureFlash: true,
-  })(req, res);
-};
-const login2 = asyncWrapper(async (req, res, next) => {
+const login = asyncWrapper(async (req, res, next) => {
   const { email, password } = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -268,30 +251,9 @@ const deleteUser = asyncWrapper(async (req, res, next) => {
   );
   return next(error);
 });
-const historyUser = asyncWrapper(async (req, res, next) => {
-  const { youtube_link } = req.body;
-  // const { email } = req.currentUser;
-  const result = youtube_link.substring(0, 5);
-  const currentDate = moment().tz('Africa/Cairo');
-  // const user = await UserAll.findOne({ email: email });
-  // user.Info.push({link:youtube_link, result:result, currentDate:currentDate.format("DD-MMM-YYYY hh:mm:ss a"),p1:10 , p2:15,p3:80});
-  // await user.save();
-  // الرد بنجاح
-  return res.status(200).json({
-    status: httpStatus.SUCCESS,
-    result : result ,
-    p1:10,
-    p2:60,
-    p3:90,
-    // allData : user.Info
-  });
-});
 
 //
 module.exports = {
-  //getAllUsers,
-  // authGoogleCallback,
-  // upload,
   deleteUser,
   historyUser,
   // forgotPassword,
@@ -303,5 +265,4 @@ module.exports = {
   logout2,
   success,
   failure,
-  login2,
 };

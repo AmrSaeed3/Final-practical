@@ -7,7 +7,7 @@ const app = express();
 const path = require("path")
 const mongoose = require("mongoose");
 require("dotenv").config();
-const utl = process.env.MONGO_URL;
+const utl = process.env.MONGO_URL2;
 mongoose.connect(utl).then(() => {
   console.log("mongoDB server start");
 });

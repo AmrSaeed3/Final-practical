@@ -17,6 +17,10 @@ const User = new mongoose.Schema({
     type: String,
     require: [true, "email are required"],
   },
+  Phone: {
+    type: String,
+    require: [true, "email are required"],
+  },
   token: {
     type: String,
     require: [true, "token are required"],
@@ -30,14 +34,10 @@ const User = new mongoose.Schema({
     enum: [userRole.USER, userRole.ADMIN, userRole.MANGER],
     default: userRole.USER,
   },
-  Info :{
-    type: Array,
-  },
 });
 const UserToken = new mongoose.Schema({
   token: String,
 });
-
 
 const user1 = mongoose.model("Acount", User);
 const user2 = mongoose.model("UserToken", UserToken);
