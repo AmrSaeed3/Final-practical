@@ -11,6 +11,8 @@ const verifyToken = require("../Middlewires/verify.token");
 
 router.route("/register").post(validationSchema(), usersController.register);
 
+router.route("/verify").post(verifyToken, usersController.verify);
+
 router.route("/login").post(validationSchema2(), usersController.login);
 
 router

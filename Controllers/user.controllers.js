@@ -4,6 +4,7 @@ const httpStatus = require("../utils/httpStatus");
 const asyncWrapper = require("../Middlewires/asyncWrapper");
 const generateJwt = require("../utils/generate.jwt");
 const { validationResult } = require("express-validator");
+const emailVerfy = require("../Middlewires/sendEmail");
 const bcrypt = require("bcryptjs");
 const moment = require("moment-timezone");
 const UserAll = user1;
@@ -16,25 +17,64 @@ const register = asyncWrapper(async (req, res, next) => {
     const error = appError.create(errors.array()[0], 400, httpStatus.FAIL);
     return next(error);
   }
-  const { username, email, numPhone, password } = req.body;
+  const { userName, email, numPhone, password , role } = req.body;
   const olduser = await UserAll.findOne({ email: email });
   if (olduser) {
     const error = appError.create("user already exists", 400, httpStatus.FAIL);
     return next(error);
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  const currentDate = moment().tz("Africa/Cairo");
-  const newUser = new UserAll({
-    userName: username,
+  const verifyCode = await emailVerfy.sendEmail(email);
+  const hashVerifyCode = await bcrypt.hash(JSON.stringify(verifyCode), 10);
+  const token = await generateJwt.generateVerify({
     email: email,
+    userName: userName,
+    role: role,
+    verifyCode: hashVerifyCode,
+    numPhone:numPhone,
     password: hashPassword,
-    numPhone: numPhone,
+  });
+  return res.status(200).json({
+    status: httpStatus.SUCCESS,
+    token: token.token,
+    expireData: token.expireIn,
+  });
+});
+const verify = asyncWrapper(async (req, res, next) => {
+  // الحصول على التاريخ والوقت الحالي
+  const currentDate = moment().tz("Africa/Cairo");
+  const { email, verifyCode, password,numPhone,userName, role } = req.currentUser;
+  //  console.log("req.file", req.file);
+  const currentCode = verifyCode;
+  const code = req.body.code;
+  const matchedCode = await bcrypt.compare(code, currentCode);
+  if (!matchedCode) {
+    const error = appError.create(
+      "the code verification not correct",
+      400,
+      httpStatus.FAIL
+    );
+    return next(error);
+  }
+  const oldEmail = await UserAll.findOne({ email: email });
+  if (oldEmail) {
+    const error = appError.create(
+      "the email has been already registrated",
+      400,
+      httpStatus.FAIL
+    );
+    return next(error);
+  }
+  const newUser = new UserAll({
+    userName,
+    email,
+    numPhone,
+    password,
+    role,
     date: currentDate.format("DD-MMM-YYYY hh:mm:ss a"),
   });
   await newUser.save();
-  return res.status(200).json({
-    status: httpStatus.SUCCESS,
-  });
+  res.status(200).json({ status: httpStatus.SUCCESS });
 });
 
 const login = asyncWrapper(async (req, res, next) => {
@@ -75,6 +115,7 @@ const login = asyncWrapper(async (req, res, next) => {
     return next(error);
   }
 });
+
 // مسار لإعادة تعيين كلمة المرور (نسيان الباسورد)
 
 // const forgotPassword = asyncWrapper(async (req, res, next) => {
@@ -259,6 +300,7 @@ module.exports = {
   // resetPasswordSend,
   // resetPasswordOk,
   register,
+  verify,
   login,
   // logout,
   logout2,
