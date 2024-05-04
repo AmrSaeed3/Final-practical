@@ -82,7 +82,7 @@ const addChapterword = async (req, res, next) => {
           name: name,
           extension: extension,
           author: author,
-          Photo: newNamePhoto,
+          photo: newNamePhoto,
           totalLines: pages.length * linesPerPage,
           totalPages: pages.length,
           paragraphs: pages,
