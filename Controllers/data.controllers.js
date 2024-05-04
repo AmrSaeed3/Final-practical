@@ -124,7 +124,7 @@ const allBook = async (req, res, next) => {
   const name = req.params.name;
   const currentPhoto = `${req.protocol}://${req.get(
     "host"
-  )}/${folderphoto}/${name}`;
+  )}/${folderphoto}/حكاية مصرية`;
   const book = await data1.findOne(
     { name: name },
     { __v: false , extension: false }
@@ -143,7 +143,7 @@ const allBook = async (req, res, next) => {
     Photo: `${currentPhoto}/${book.photo}`,
     author : book.author,
     totoslPages : book.totalPages,
-    audio : `${currentPhoto}/${book.sound}`,
+    audio : `${currentPhoto}/حكاية مصرية.mp3`,
     DatePublish : book.date,
     Listen : book.Listen,
     Read : book.Read,
