@@ -9,7 +9,7 @@ const httpStatus = require("../utils/httpStatus");
 const moment = require("moment-timezone");
 const folderphoto = "uploads";
 
-const addChapterword = async (req, res, next) => {
+const addBookWord = async (req, res, next) => {
   const Sound = req.files["Audio"][0].originalname;
   const extensionSound = Sound.split(".")[1];
   const Photo = req.files["Photo"][0].originalname;
@@ -120,6 +120,39 @@ const addChapterword = async (req, res, next) => {
   });
 };
 
-module.exports = {
-  addChapterword,
+const allBook = async (req, res, next) => {
+  const name = req.params.name;
+  const currentPhoto = `${req.protocol}://${req.get(
+    "host"
+  )}/${folderphoto}/${name}`;
+  const book = await data1.findOne(
+    { name: name },
+    { __v: false , extension: false }
+  );
+  if (!book) {
+    const error = appError.create(
+      "this chapter not found try again !",
+      401,
+      statusText.FAIL
+    );
+    return next(error);
+  }
+  res.status(200).json({
+    id: book._id,
+    name : book.name,
+    Photo: `${currentPhoto}/${book.photo}`,
+    author : book.author,
+    totoslPages : book.totalPages,
+    audio : `${currentPhoto}/${book.sound}`,
+    DatePublish : book.date,
+    Listen : book.Listen,
+    Read : book.Read,
+    data : book.paragraphs,
+  });
 };
+
+module.exports = {
+  addBookWord,
+  allBook,
+};
+

@@ -34,7 +34,7 @@ const usersRouter = require("./Routes/user.routes");
 app.use("/", usersRouter); //api/users
 
 const dataRouter = require("./Routes/data.route");
-app.use("/", dataRouter); //add Books
+app.use("/data/", dataRouter); //add Books
 
 app.use('/uploads',express.static(path.join(__dirname ,'uploads')))
 app.all("*", (req, res, next) => {
