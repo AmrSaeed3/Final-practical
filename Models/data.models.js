@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const classification = require("../utils/classification of books");
 
 const Chapters = new mongoose.Schema({
+  email : String,
   name: String,
   extension: String,
   photo: String,
