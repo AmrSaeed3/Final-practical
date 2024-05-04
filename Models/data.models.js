@@ -6,10 +6,20 @@ const Chapters = new mongoose.Schema({
   extension: String,
   photo: String,
   author: String,
+  linesPerPage: Number,
   totalLines: Number,
   totalPages: Number,
   paragraphs: Array,
-  date : String,
+  sound: String,
+  date: String,
+  Listen: {
+    type: Boolean,
+    default: false,
+  },
+  Read: {
+    type: Boolean,
+    default: false,
+  },
   classification: {
     type: String,
     enum: [

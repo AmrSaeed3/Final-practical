@@ -8,6 +8,7 @@ router.post(
   multerUpload.fields([
     { name: "Word", maxCount: 1 },
     { name: "Photo", maxCount: 1 },
+    { name: "Audio", maxCount: 1 },
   ]),
   dataController.addChapterword
 );

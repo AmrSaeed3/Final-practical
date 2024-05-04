@@ -10,6 +10,8 @@ const moment = require("moment-timezone");
 const folderphoto = "uploads";
 
 const addChapterword = async (req, res, next) => {
+  const Sound = req.files["Audio"][0].originalname;
+  const extensionSound = Sound.split(".")[1];
   const Photo = req.files["Photo"][0].originalname;
   const extensionPhoto = Photo.split(".")[1];
   const filePath = req.files["Word"][0].originalname;
@@ -18,7 +20,8 @@ const addChapterword = async (req, res, next) => {
   //   "host"
   // )}/${folderphoto}/${name}/${Photo}`;
   const extension = filePath.split(".")[1];
-  const newNamePhoto = `${name}.${extensionPhoto}`
+  const newNamePhoto = `${name}.${extensionPhoto}`;
+  const newNameSound = `${name}.${extensionSound}`;
   pathData = path.resolve(__dirname, "..", `${folderphoto}/${name}`, filePath);
   const { author, classification } = req.body;
   const oldData = await data1.findOne({ name: name });
@@ -83,10 +86,14 @@ const addChapterword = async (req, res, next) => {
           extension: extension,
           author: author,
           photo: newNamePhoto,
+          sound: newNameSound,
+          linesPerPage: linesPerPage,
           totalLines: pages.length * linesPerPage,
           totalPages: pages.length,
           paragraphs: pages,
           date: currentDate.format("DD-MMM-YYYY hh:mm:ss a"),
+          Listen: true,
+          Read: true,
           classification: classificationBook.History,
         });
         await newData.save();
@@ -94,11 +101,15 @@ const addChapterword = async (req, res, next) => {
           message: "SUCCESS Upload file",
           name: name,
           extension: extension,
-          Photo: newNamePhoto,
+          photo: newNamePhoto,
           author: author,
+          sound: newNameSound,
           classification: classification.History,
+          linesPerPage: linesPerPage,
           Totallines: pages.length * linesPerPage,
           TotalPages: pages.length,
+          Listen: true,
+          Read: true,
           data: pages,
         });
       })
