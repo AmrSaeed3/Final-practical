@@ -99,7 +99,7 @@ const login = asyncWrapper(async (req, res, next) => {
     });
     user.token = token;
     await user.save();
-    res.json({
+    res.status(200).json({
       status: httpStatus.SUCCESS,
       data: { token: token },
     });
@@ -207,66 +207,6 @@ const login = asyncWrapper(async (req, res, next) => {
 //   return next(error);
 // });
 
-const logout2 = (req, res) => {
-  // req.logout((err) => {
-  //   if (err) {
-  //     return res
-  //       .status(500)
-  //       .json("Logout failed! " + req.flash("error"))
-  //       .redirect("/"); // أو يمكنك التعامل مع الخطأ بطريقة أخرى
-  //   }
-  //   res.redirect("/");
-  // });
-  (req, res) => {
-    req.logout((err) => {
-      if (err) {
-        console.error("Error during logout:", err);
-        return res
-          .status(500)
-          .json({ status: "error", message: "Internal Server Error" });
-      }
-      res.redirect("/login");
-    });
-  };
-};
-const success = (req, res, next) => {
-  const error = appError.create("Login successful!", 200, httpStatus.SUCCESS);
-  return next(error);
-};
-const failure = (req, res, next) => {
-  const result = req.flash("error");
-  // res.status(401).json("Login failed! " + req.flash("error"));
-  const error = appError.create(result[0], 401, httpStatus.FAIL);
-  return next(error);
-};
-
-// const logout = async (req, res) => {
-//   if (req.isAuthenticated()) {
-//     const { email } = req.user;
-
-//     // توفير وظيفة callback
-//     req.logout(() => {
-//       // حذف البريد الإلكتروني من قاعدة البيانات
-//       UserGoogle
-//         .findOneAndDelete({ email })
-//         .then(() => {
-//           // حذف الكوكيز معرف المستخدم
-//           res.clearCookie("userId");
-//           res.clearCookie("sessionToken");
-//           res.redirect("/");
-//         })
-//         .catch((err) => {
-//           console.error("Error deleting user:", err);
-//           res.redirect("/");
-//         });
-//     });
-
-//     return;
-//   }
-
-//   // إذا لم يكن المستخدم قد قام بتسجيل الدخول، قم بتوجيهه إلى الصفحة الرئيسية أو أي مكان آخر
-//   res.redirect("/");
-// };
 
 const deleteUser = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
@@ -302,8 +242,4 @@ module.exports = {
   register,
   verify,
   login,
-  // logout,
-  logout2,
-  success,
-  failure,
 };

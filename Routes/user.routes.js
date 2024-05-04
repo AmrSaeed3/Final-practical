@@ -4,7 +4,6 @@ const usersController = require("../Controllers/user.controllers");
 const {
   validationSchema,
   validationSchema2,
-  validationSchema3,
   validationSchema4,
 } = require("../Middlewires/validationSchema");
 const verifyToken = require("../Middlewires/verify.token");
@@ -19,12 +18,5 @@ router
   .route("/deleteUser")
   .post(validationSchema4(), usersController.deleteUser);
 
-router.route("/success").get(usersController.success);
-
-router.route("/failure").get(usersController.failure);
-
-// router.route("/logout").get(usersController.logout);
-
-router.route("/logout2").get(usersController.logout2);
 
 module.exports = router;
