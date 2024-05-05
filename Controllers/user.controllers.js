@@ -293,7 +293,7 @@ const oneUser = async (req, res, next) => {
   )}/${folderphoto}`;
   const User = await UserAll.find(
     {_id : name},
-    { __v: false, role: false, date: false, password: false}
+    { __v: false, role: false, password: false}
   );
   User.map((photo) => {
     photo.avatar = `${currentPhoto}/${photo.avatar}`;
