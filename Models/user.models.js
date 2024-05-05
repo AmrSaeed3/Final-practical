@@ -33,9 +33,17 @@ const User = new mongoose.Schema({
     type: String,
     require: [true, "date are required"],
   },
-  visitors: Number,
-  Publish: Number,
-  followers: Number,
+  Publish:{
+    type : Number,
+    default : 0,
+  },
+  followers:{
+    type : Number,
+    default : 0,
+  },visitors:{
+    type : Number,
+    default : 0,
+  },
   role: {
     type: String, //["USER" , "ADMIN" , "MANGER"]
     enum: [userRole.USER, userRole.ADMIN, userRole.MANGER],
