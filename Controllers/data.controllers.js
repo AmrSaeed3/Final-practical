@@ -137,12 +137,12 @@ const allBook = async (req, res, next) => {
       Summary: false,
       totalLines: false,
       linesPerPage: false,
-      name: false,
+      // name: false,
       sound: false,
     }
   );
   book.map((photo) => {
-    photo.photo = `${currentPhoto}/${photo.photo}`;
+    photo.photo = `${currentPhoto}/${photo.name}/${photo.photo}`;
   });
   // book.map((audio) => {
   //   audio.sound = `${currentPhoto}/حكاية مصرية.mp3`;
@@ -164,10 +164,10 @@ const oneBook = async (req, res, next) => {
   )}/${folderphoto}`;
   const book = await data1.findOne(
     { _id: name },
-    { __v: false, extension: false , name:false,}
+    { __v: false, extension: false }
   );
-    book.photo = `${currentPhoto}/${book.photo}`;
-    book.sound = `${currentPhoto}/حكاية مصرية.mp3`;
+    book.photo = `${currentPhoto}/${book.name}/${book.photo}`;
+    book.sound = `${currentPhoto}/حكاية مصرية/حكاية مصرية.mp3`;
 
   if (!book) {
     const error = appError.create(
