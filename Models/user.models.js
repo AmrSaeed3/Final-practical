@@ -17,6 +17,10 @@ const User = new mongoose.Schema({
     type: String,
     require: [true, "email are required"],
   },
+  avatar: {
+    type: String,
+    default: "profile.png",
+  },
   numPhone: {
     type: String,
     require: [true, "email are required"],
@@ -29,6 +33,9 @@ const User = new mongoose.Schema({
     type: String,
     require: [true, "date are required"],
   },
+  visitors: Number,
+  Publish: Number,
+  followers: Number,
   role: {
     type: String, //["USER" , "ADMIN" , "MANGER"]
     enum: [userRole.USER, userRole.ADMIN, userRole.MANGER],

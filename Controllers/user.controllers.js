@@ -8,7 +8,7 @@ const emailVerfy = require("../Middlewires/sendEmail");
 const bcrypt = require("bcryptjs");
 const moment = require("moment-timezone");
 const UserAll = user1;
-// const
+const folderphoto = "Avatar";
 
 //register
 const register = asyncWrapper(async (req, res, next) => {
@@ -17,7 +17,7 @@ const register = asyncWrapper(async (req, res, next) => {
     const error = appError.create(errors.array()[0], 400, httpStatus.FAIL);
     return next(error);
   }
-  const { userName, email, numPhone, password , role } = req.body;
+  const { userName, email, numPhone, password, role } = req.body;
   const olduser = await UserAll.findOne({ email: email });
   if (olduser) {
     const error = appError.create("user already exists", 400, httpStatus.FAIL);
@@ -31,7 +31,7 @@ const register = asyncWrapper(async (req, res, next) => {
     userName: userName,
     role: role,
     verifyCode: hashVerifyCode,
-    numPhone:numPhone,
+    numPhone: numPhone,
     password: hashPassword,
   });
   return res.status(200).json({
@@ -43,7 +43,8 @@ const register = asyncWrapper(async (req, res, next) => {
 const verify = asyncWrapper(async (req, res, next) => {
   // الحصول على التاريخ والوقت الحالي
   const currentDate = moment().tz("Africa/Cairo");
-  const { email, verifyCode, password,numPhone,userName, role } = req.currentUser;
+  const { email, verifyCode, password, numPhone, userName, role } =
+    req.currentUser;
   //  console.log("req.file", req.file);
   const currentCode = verifyCode;
   const code = req.body.code;
@@ -207,7 +208,6 @@ const login = asyncWrapper(async (req, res, next) => {
 //   return next(error);
 // });
 
-
 const deleteUser = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -233,9 +233,86 @@ const deleteUser = asyncWrapper(async (req, res, next) => {
   return next(error);
 });
 
+//register
+// const register2 = asyncWrapper(async (req, res, next) => {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     const error = appError.create(errors.array()[0], 400, httpStatus.FAIL);
+//     return next(error);
+//   }
+//   const { userName, email, numPhone, password } = req.body;
+//   const Avatar = email.split("@")[0];
+//   const olduser = await UserAll.findOne({ email: email });
+//   if (olduser) {
+//     const error = appError.create("user already exists", 400, httpStatus.FAIL);
+//     return next(error);
+//   }
+//   const hashPassword = await bcrypt.hash(password, 10);
+//   const currentDate = moment().tz("Africa/Cairo");
+//   const newUser = new UserAll({
+//     userName: userName,
+//     email: email,
+//     avatar: `${Avatar}.png`,
+//     password: hashPassword,
+//     phone: numPhone,
+//     date: currentDate.format("DD-MMM-YYYY hh:mm:ss a"),
+//   });
+//   await newUser.save();
+//   return res.status(200).json({
+//     status: httpStatus.SUCCESS,
+//   });
+// });
+
+const allUser = async (req, res, next) => {
+  const currentPhoto = `${req.protocol}://${req.get(
+    "host"
+  )}/${folderphoto}`;
+  const User = await UserAll.find(
+    {},
+    { __v: false, role: false, date: false, password: false, _id: false }
+  );
+  User.map((photo) => {
+    photo.avatar = `${currentPhoto}/${photo.avatar}`;
+  });
+  if (!User) {
+    const error = appError.create(
+      "there not found Users!",
+      401,
+      statusText.FAIL
+    );
+    return next(error);
+  }
+  res.status(200).json(User);
+};
 //
+
+const oneUser = async (req, res, next) => {
+  const name = req.params.name;
+  const currentPhoto = `${req.protocol}://${req.get(
+    "host"
+  )}/${folderphoto}`;
+  const User = await UserAll.find(
+    {email : name},
+    { __v: false, role: false, date: false, password: false, _id: false }
+  );
+  User.map((photo) => {
+    photo.avatar = `${currentPhoto}/${photo.avatar}`;
+  });
+  if (!User) {
+    const error = appError.create(
+      "this User not found try again !",
+      401,
+      statusText.FAIL
+    );
+    return next(error);
+  }
+  res.status(200).json(User);
+};
 module.exports = {
   deleteUser,
+  // register2,
+  allUser,
+  oneUser,
   // forgotPassword,
   // resetPasswordSend,
   // resetPasswordOk,

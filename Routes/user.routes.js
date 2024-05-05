@@ -18,5 +18,8 @@ router
   .route("/deleteUser")
   .post(validationSchema4(), usersController.deleteUser);
 
+router.route("/allUser").get(usersController.allUser);
+
+router.route("/oneUser/:name").get(usersController.oneUser);
 
 module.exports = router;
