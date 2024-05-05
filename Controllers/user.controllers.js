@@ -269,7 +269,7 @@ const allUser = async (req, res, next) => {
   )}/${folderphoto}`;
   const User = await UserAll.find(
     {},
-    { __v: false, role: false, date: false, password: false, _id: false }
+    { __v: false, role: false, date: false, password: false }
   );
   User.map((photo) => {
     photo.avatar = `${currentPhoto}/${photo.avatar}`;
@@ -292,8 +292,8 @@ const oneUser = async (req, res, next) => {
     "host"
   )}/${folderphoto}`;
   const User = await UserAll.find(
-    {email : name},
-    { __v: false, role: false, date: false, password: false, _id: false }
+    {_id : name},
+    { __v: false, role: false, date: false, password: false}
   );
   User.map((photo) => {
     photo.avatar = `${currentPhoto}/${photo.avatar}`;

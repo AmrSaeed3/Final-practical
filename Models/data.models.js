@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const classification = require("../utils/classification of books");
 
 const Chapters = new mongoose.Schema({
-  email : String,
+  // email : String,
+  nameBook : String,
   name: String,
   extension: String,
   photo: String,
@@ -13,6 +14,8 @@ const Chapters = new mongoose.Schema({
   paragraphs: Array,
   sound: String,
   date: String,
+  Ratings : Number,
+  Summary : String,
   Listen: {
     type: Boolean,
     default: false,
@@ -23,20 +26,20 @@ const Chapters = new mongoose.Schema({
   },
   classification: {
     type: String,
-    enum: [
-      classification.Arts_Entertainment,
-      classification.General_sciences,
-      classification.Geography,
-      classification.History,
-      classification.Language,
-      classification.Literature,
-      classification.Natural_Sciences,
-      classification.Philosophy,
-      classification.Religions,
-      classification.Social_Sciences,
-      classification.Technology,
-      classification.politics,
-    ],
+    // enum: [
+    //   classification.Arts_Entertainment,
+    //   classification.General_sciences,
+    //   classification.Geography,
+    //   classification.History,
+    //   classification.Language,
+    //   classification.Literature,
+    //   classification.Natural_Sciences,
+    //   classification.Philosophy,
+    //   classification.Religions,
+    //   classification.Social_Sciences,
+    //   classification.Technology,
+    //   classification.politics,
+    // ],
     default: "التاريخ",
   },
 });

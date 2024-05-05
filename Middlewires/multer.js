@@ -12,7 +12,6 @@ const storage = multer.diskStorage({
   },
   filename(req, file, cb) {
     const imageType = file.mimetype.split("/")[0];
-    console.log(imageType);
     if (imageType === "application") {
       cb(null, file.originalname);
     } else if (imageType === "image") {

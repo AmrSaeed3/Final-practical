@@ -8,11 +8,14 @@ router.route(
   multerUpload.fields([
     { name: "Word", maxCount: 1 },
     { name: "Photo", maxCount: 1 },
-    { name: "Audio", maxCount: 1 },
+    // { name: "Audio", maxCount: 1 },
   ]),
   dataController.addBookWord
 );
 
-router.route("/readBook/:name").get( dataController.allBook);
+router.route("/readOneBook/:name").get( dataController.oneBook);
+
+router.route("/readBooks/").get( dataController.allBook);
+
 
 module.exports = router;
