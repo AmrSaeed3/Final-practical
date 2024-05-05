@@ -2,7 +2,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 
-let fileNames = [];
+const fileNames = [];
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     fileNames.push(file.originalname.split(".")[0]);
